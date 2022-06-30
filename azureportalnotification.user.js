@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azure Portal Notification
 // @namespace    http://horihiro.net/
-// @version      0.1
+// @version      0.2
 // @description  Azure Portal Notification
 // @author       horihiro
 // @match        https://portal.azure.com/*
@@ -96,7 +96,14 @@
         });
       });
     });
-    toastObserver.observe(document.querySelector(TARGET_CLASS_TOAST), { childList: true, subtree: true });
+    const toastContainerObserver = new MutationObserver((mutations) => {
+      const toastContainer = document.querySelector(TARGET_CLASS_TOAST);
+      if (!toastContainer) return;
+      console.log(toastContainer);
+      toastContainerObserver.disconnect();
+      toastObserver.observe(document.querySelector(TARGET_CLASS_TOAST), { childList: true, subtree: true });
+    });
+    toastContainerObserver.observe(document, { childList: true, subtree: true });
     // End desktop notification
   });
 })();
