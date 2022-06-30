@@ -73,12 +73,7 @@
   // End blinking favicon
 
   // Begin desktop notification
-  const permission = await new Promise((res) => {
-    Notification.requestPermission((result) => {
-      res(result);
-    });
-  });
-  if (permission !== 'granted') return;
+  if ((await Notification.requestPermission()) !== 'granted') return;
 
   const TARGET_CLASS_TOAST = '.fxs-toast';
   const icon = 'https://portal.azure.com/favicon.ico';
