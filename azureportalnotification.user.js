@@ -5,8 +5,9 @@
 // @description  Azure Portal Notification
 // @author       horihiro
 // @match        https://portal.azure.com/*
-// @downloadURL  https://horihiro.github.io/azurePortalNotification/azureportalnotification.user.js
-// @updateURL    https://horihiro.github.io/azurePortalNotification/azureportalnotification.meta.js
+// @match        https://ms.portal.azure.com/*
+// @downloadURL  https://github.com/horihiro/azurePortalNotification/raw/master/azureportalnotification.user.js
+// @updateURL    https://github.com/horihiro/azurePortalNotification/raw/master/azureportalnotification.meta.js
 // @grant        none
 // ==/UserScript==
 
