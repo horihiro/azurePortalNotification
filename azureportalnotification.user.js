@@ -76,7 +76,7 @@
   if ((await Notification.requestPermission()) !== 'granted') return;
 
   const TARGET_CLASS_TOAST = '.fxs-toast';
-  const icon = 'https://portal.azure.com/favicon.ico';
+  const icon = '/Content/favicon.ico';
   const toastObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       Array.prototype.forEach.call(mutation.addedNodes, (addedNode) => {
