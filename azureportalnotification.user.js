@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azure Portal Notification
 // @namespace    http://horihiro.net/
-// @version      0.2
+// @version      0.3
 // @description  Azure Portal Notification
 // @author       horihiro
 // @match        https://portal.azure.com/*
@@ -36,7 +36,7 @@
   const TARGET_CLASS = 'fxs-display-none';
   const BLANK_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAhElEQVR4Xu3VAREAMAwCseLfdIV85qAcGbv4W/z+E4AGxBNAIF4AnyACCMQTQCBeACuAAALxBBCIF8AKIIBAPAEE4gWwAgggEE8AgXgBrAACCMQTQCBeACuAAALxBBCIF8AKIIBAPAEE4gWwAgggEE8AgXgBrAACCMQTQCBeACuAQJ3AA2jYAEGs/2CBAAAAAElFTkSuQmCC';
 
-  const faviconOrig = document.querySelectorAll('*[rel="shortcut icon"]')[0];
+  let faviconOrig = document.querySelectorAll('*[rel="shortcut icon"]')[0];
   const faviconBlank = document.createElement('link');
   const head = faviconOrig.parentNode;
   faviconBlank.href = BLANK_IMAGE;
@@ -49,7 +49,7 @@
     timeout = setTimeout(() => {
       const current = document.querySelectorAll('*[rel="shortcut icon"]')[0];
       head.removeChild(current);
-      head.appendChild(current === faviconOrig ? faviconBlank : faviconOrig);
+      head.appendChild(current === faviconBlank ? faviconOrig : faviconBlank);
       blinkFavicon(params);
     }, params.interval);
   };
@@ -58,6 +58,7 @@
     mutatons.forEach((mutation) => {
       if (mutation.attributeName !== 'class') return;
       if (currentClasses.indexOf(TARGET_CLASS) >= 0 && notificationsPane.className.indexOf(TARGET_CLASS) < 0) {
+        faviconOrig = document.querySelectorAll('*[rel="shortcut icon"]')[0];
         blinkFavicon({
           interval: 500
         });
@@ -73,10 +74,15 @@
   // End blinking favicon
 
   // Begin desktop notification
-  if ((await Notification.requestPermission()) !== 'granted') return;
+  const permission = await new Promise((res) => {
+    Notification.requestPermission((result) => {
+      res(result);
+    });
+  });
+  if (permission !== 'granted') return;
 
   const TARGET_CLASS_TOAST = '.fxs-toast';
-  const icon = '/Content/favicon.ico';
+  const icon = 'https://portal.azure.com/Content/favicon.ico';
   const toastObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       Array.prototype.forEach.call(mutation.addedNodes, (addedNode) => {

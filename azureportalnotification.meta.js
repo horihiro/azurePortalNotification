@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azure Portal Notification
 // @namespace    http://horihiro.net/
-// @version      0.2
+// @version      0.3
 // @description  Azure Portal Notification
 // @author       horihiro
 // @match        https://portal.azure.com/*
