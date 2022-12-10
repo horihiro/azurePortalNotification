@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Azure Portal Notification
 // @namespace    http://horihiro.net/
-// @version      0.3
+// @version      0.4
 // @description  Azure Portal Notification
 // @author       horihiro
 // @match        https://portal.azure.com/*
@@ -49,7 +49,11 @@
     timeout = setTimeout(() => {
       const current = document.querySelectorAll('*[rel="shortcut icon"]')[0];
       head.removeChild(current);
-      head.appendChild(current === faviconBlank ? faviconOrig : faviconBlank);
+      if (current === faviconBlank) head.appendChild(faviconOrig);
+      else {
+        faviconOrig = current;
+        head.appendChild(faviconBlank);
+      }
       blinkFavicon(params);
     }, params.interval);
   };
@@ -58,7 +62,6 @@
     mutatons.forEach((mutation) => {
       if (mutation.attributeName !== 'class') return;
       if (currentClasses.indexOf(TARGET_CLASS) >= 0 && notificationsPane.className.indexOf(TARGET_CLASS) < 0) {
-        faviconOrig = document.querySelectorAll('*[rel="shortcut icon"]')[0];
         blinkFavicon({
           interval: 500
         });
