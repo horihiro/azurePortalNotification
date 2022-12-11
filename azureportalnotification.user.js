@@ -42,7 +42,9 @@
   faviconBlank.href = BLANK_IMAGE;
   faviconBlank.setAttribute('rel', 'shortcut icon');
   faviconBlank.setAttribute('type', 'image/png');
-  head.removeChild(document.querySelectorAll('*[rel="icon"]')[0]);
+  [...head.querySelectorAll('link[rel*="shortcut"][rel*="icon"]')].forEach((icon) => {
+    head.removeChild(icon);
+  });
   let timeout = 0;
 
   const blinkFavicon = (params) => {
