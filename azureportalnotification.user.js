@@ -36,11 +36,17 @@
   const TARGET_CLASS = 'fxs-display-none';
   const BLANK_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAhElEQVR4Xu3VAREAMAwCseLfdIV85qAcGbv4W/z+E4AGxBNAIF4AnyACCMQTQCBeACuAAALxBBCIF8AKIIBAPAEE4gWwAgggEE8AgXgBrAACCMQTQCBeACuAAALxBBCIF8AKIIBAPAEE4gWwAgggEE8AgXgBrAACCMQTQCBeACuAQJ3AA2jYAEGs/2CBAAAAAElFTkSuQmCC';
 
-  let faviconOrig = document.querySelectorAll('*[rel="shortcut icon"]')[0];
+  let faviconOrig = document.querySelectorAll('link[rel="icon"]')[0];
+  if (!faviconOrig) {
+    faviconOrig = document.createElement('link');
+    faviconOrig.setAttribute('rel', 'icon');
+    faviconOrig.setAttribute('type', 'image/x-icon');
+    faviconOrig.setAttribute('href', '/Content/favicon.ico');
+  }
   const faviconBlank = document.createElement('link');
-  const head = faviconOrig.parentNode;
+  const head = document.head;
   faviconBlank.href = BLANK_IMAGE;
-  faviconBlank.setAttribute('rel', 'shortcut icon');
+  faviconBlank.setAttribute('rel', 'icon');
   faviconBlank.setAttribute('type', 'image/png');
   [...head.querySelectorAll('link[rel*="shortcut"][rel*="icon"]')].forEach((icon) => {
     head.removeChild(icon);
@@ -49,7 +55,7 @@
 
   const blinkFavicon = (params) => {
     timeout = setTimeout(() => {
-      const current = document.querySelectorAll('*[rel="shortcut icon"]')[0];
+      const current = document.querySelectorAll('link[rel="icon"]')[0];
       head.removeChild(current);
       if (current === faviconBlank) head.appendChild(faviconOrig);
       else {
@@ -69,7 +75,7 @@
         });
       } else if (currentClasses.indexOf(TARGET_CLASS) < 0 && notificationsPane.className.indexOf(TARGET_CLASS) >= 0) {
         clearTimeout(timeout);
-        head.removeChild(document.querySelectorAll('*[rel="shortcut icon"]')[0]);
+        head.removeChild(document.querySelectorAll('link[rel="icon"]')[0]);
         head.appendChild(faviconOrig);
       }
       currentClasses = notificationsPane.className;
